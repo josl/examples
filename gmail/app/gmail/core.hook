@@ -1,0 +1,240 @@
+::
+::
+::::
+  ::
+/?  314
+!:
+::::  sivtyv-barnel
+  ::
+|%
+++  axle  (unit ,[[token=@t ttl=@da] ids=(list ,@t) messages=(map ,id=@t msg)])
+++  msg  ,[id=@t sub=@t from=@t date=@t]
+++  move  ,[bone (mold note gift)]  ::  type of arvo calls we make
+++  note
+$%  $:  %e
+$%  [%them p=(unit hiss)]
+    [%nice ~]
+==  ==
+    $:  %t
+$%  [%wait p=@da]    
+==  ==
+[%g %mess [ship path] ship cage]
+==
+++  gift
+  $%  [%nice ~]
+      [%mean p=ares]
+      [%rush %json json] 
+  ==
+++  sign
+  $%  $:  %e
+  $%  [%thou p=httr]
+      [%nice ~]
+  ==  ==
+      $:  %g
+  $%  [%mean p=ares]
+      [%nice ~]
+  ==  ==  
+  [%t %wake ~]
+  ==
+++  redirect-uri  "http://localhost:8443/gen/main/pub/fab/gmail"
+++  client-id  "181482021531-0lr34omo2g". ::concat . enate
+    "167hl1cacvohe5lu986s35.apps.googleusercontent.com"
+++  client-secret  "zEprGO03N56D1P5kOtFrCf36"
+--
+::
+!:
+|_  [hid=hide vat=axle]
+++  return  |=(a=move `[(list move) _+>.$]`[[a]~ ..return])
+::
+++  httprequest                                                          ::   produce a ++hiss
+  |=  [ost=bone pour-path=wire domain=cord end-point=path request-type=$|(%get [%post p=(each json quay)]) queries=quay]
+  ^-  move
+  =+  ^=  parsedurl                                                      ::   ++purl          
+      :+  host-port=[security=%.y port=~ host=[%.y path=/com/[domain]/www]]::   ++hart
+        endpoint-extentions=[extentions=~ endpoint=end-point]            ::   ++pork
+      query-strings=queries                                              ::   ++quay
+  =+  ^-  request=hiss                              :: hiss is hoon type of http request
+    :-  parsedurl
+    ?@  request-type  ::  determine whether request is GET(atom) or POST(cell of post and body)
+      [request-type ~ ~]                            ::  ++moth of GET. empty body    
+    ?-  -.p.request-type
+      %&  =+  con=content-type/['application/json']~
+          [-.request-type [con `~] [~ (tact (pojo p.p.request-type))]]           ::  ++moth of POST. unit JSON body
+      %|  =+  con=content-type/['application/x-www-form-urlencoded']~
+          [-.request-type [con `~] [~ (tact (form-encode p.p.request-type))]]    ::  ++moth of POST. unit url-encoded body
+    ==
+  :^  ost  %pass
+    pour-path
+  :^  %e  %them  ~
+  request 
+::
+++  form-encode  ::  google doesn't actually want url-escaped body
+  |=  a=quay  ^-  tape
+  ?~  a  ""
+  |-  ^-  tape
+  =+  hed=(weld (trip p.i.a) `tape`['=' (trip q.i.a)])
+  ?~  t.a  hed
+  (weld hed `tape`['&' $(a t.a)])
+::
+++  poke-oauth2-code
+  |=  [ost=bone you=ship args=cord]
+  ^-  [(list move) _+>.$]
+  ?.  =(/gmail imp.hid)
+    =+  cag=`cage`[%coin-args !>(args)]
+    :_(+>.$ [ost %pass /from-child %g %mess [our.hid /coin] you cag]~)
+  =+  ^-  quay-post-body=quay
+      :~  'code'^args
+          'client_id'^(crip client-id)
+          'client_secret'^(crip client-secret)
+          'redirect_uri'^(crip redirect-uri)
+          'grant_type'^'authorization_code'  
+      ==
+  (return (httprequest ost /auth 'googleapis' /oauth2/v3/token [%post %| quay-post-body] ~))
+::
+++  initialize
+  |=  [ost=bone p=@dr]  ^+  [*(list move) +>]
+  =+  lat=`@da`(add p lat.hid)  ::  timer takes a @da, so we add a @dr to current time.
+  ?~  vat  :-([ost %give %nice ~]~ +>.$)
+  =+  quy=['access_token' token.u.vat]~
+  :_  +>.$ 
+  :~  [ost %give %nice ~] 
+      [ost %pass /time %t [%wait p=lat]]
+      (httprequest ost /list 'googleapis' /gmail/v1/users/me/messages %get quy)
+  ==    
+::
+++  poke-gmail-args
+  |=  [ost=bone you=ship args=[p=@dr ~]] 
+  :: [bone ship foo]  foo=[arg1 arg2 arg3 ~]
+  ^-  [(list move) _+>.$]
+?.  =(/gmail imp.hid)
+    =+  cag=`cage`[%gmail-args !>(args)]
+    :_(+>.$ [ost %pass /from-child %g %mess [our.hid /[app.hid]] you cag]~)
+  ?~  vat
+    [[ost %give %mean `[%no-state ~]]~ +>.$]
+  (initialize ost p.args)
+::++  get-list
+::  |=  [ost=bone *]
+::  =+  quy=['access_token' tok/en.u.vat]~
+::  (return (httprequest ost p.args 'googleapis' /gmail/v1/users/me/messages %get quy))
+::
+++  reparse-token
+  |=  jon=json  ^-  [toke=@t next=@da] 
+  ~|  unhandled-path-or-parse-fail/jon
+  =+  jo
+  =+  secs=(cu |=(a=@ud `@da`(add lat.hid (mul ~s1 a))) ni)
+  =+  token-info=(need ((ot 'access_token'^so 'expires_in'^secs ~) jon))
+  token-info
+::
+++  pour
+  |=  [ost=bone pour-path=path response=sign]
+  ^+  [*(list move) +>]
+  ~|  (,[@tas @tas ~] response)
+  ?-  +<.response
+    ?(%nice %mean)  [[ost %give +.response]~ +>.$]
+    %thou           (pour-thou ost pour-path p.response)
+    %wake           ~&  %beep  (initialize ost ~s60)
+  ==
+::
+++  pour-thou
+  |=  [ost=bone pour-path=path server-response=httr]
+  =|  mow=(list move)
+  ^+  [mow +>.$]
+  =.  mow  :_(mow [ost %give %nice ~])
+  =+  ppth=pour-path
+  ?+  pour-path
+        ~&  unhandled-path/[pour-path]
+        [mow +>.$]
+    [%time ~]
+    ~&  %received-time
+      [mow +>.$]
+    [%auth ~]                       ::  list b/c can't check head before ?~ing
+      =+  ~|  parse-error/[pour-path server-response]                 :: parse error
+          respbody=(rash q:(need r.server-response) apex:poja)        :: r.p is a (unit ,octs)
+      =+  token-information=(reparse-token respbody)                          :: reparse json with token info
+      ~&  parsed/token-information
+      =.  vat  [~ token-information ?~(vat ~ ids.u.vat) ?~(vat ~ messages.u.vat)]
+      ::  =.  mow  :_(mow another-move)
+      [mow +>.$]
+    [%list ~]
+      =+  ~|  parse-error/[pour-path server-response]
+          respbody=(rash q:(need r.server-response) apex:poja)
+      =+  newidlist=%.(respbody =>(jo (ot messages/(ar (ot id/so ~)) ~)))
+      ?~  newidlist
+        ~|(parse-fail/respbody !!)
+      ?~  vat
+        ~|  'novat'  !!
+      ?:  =(~ ids.u.vat)  ::  can't ?~ b/c then ids.u.vat would be type of null list
+        =.  ids.u.vat
+          u.newidlist
+        ~&  %new-id-list
+        [mow +>.$]
+      =+  ^=  diffidlist
+          ?~  ids.u.vat  !!   ::  checked previously
+          |-  ^-  (list ,@t)
+          ?~  u.newidlist  ~
+          ?:  =(i.u.newidlist i.ids.u.vat)
+            ~ 
+          [i.u.newidlist $(u.newidlist t.u.newidlist)]
+      =.  ids.u.vat  (weld diffidlist ids.u.vat)
+      ~&  new-items/diffidlist
+          :_  +>.$
+          %+  turn  (skip diffidlist ~(has by messages.u.vat)) ::  for every message we don't have message stored in state
+          |=  id=@t                                           ::  request that message from API
+          =+  :-  endpoint=`path`/gmail/v1/users/me/messages/[id]
+              quy=['access_token' token.u.vat]~
+          (httprequest ost /get-msgs 'googleapis' endpoint %get quy)
+::
+    [%get-msgs ~]
+      =+  ~|  parse-error/[pour-path server-response]
+          respbody=(rash q:(need r.server-response) apex:poja)
+      =+  parsed=(reparse-message respbody)
+      =+  :-  headers=+.parsed
+          message=-.parsed
+      =+  :^  id=+.message
+            subject=(~(got by headers) 'Subject')
+           from=(~(got by headers) 'From')
+          date=(~(got by headers) 'Date')
+      ?~  vat  [mow +>.$]
+      =.  messages.u.vat  (~(put by messages.u.vat) id [id subject from date])
+      ~&  received/id
+      [mow +>.$]
+  == 
+::
+++  reparse-message           ::  take off "name" and "value" keys off name and value fields
+  |=  jon=json
+  ~|  parse-fail/jon
+  =+  jo
+  =+  :-  parsed-message=(need ((ot payload/(ot body/(ot size/ni ~) ~) 'threadId'^so ~) jon))
+      ::  jep is parser resulting from returning (ot payload..headers to map,
+      ::  where map is defined on the line below. Once the result is parsed, it
+      :: becomes the second element of :-, the contents of which we return with the
+      :: final line
+      =+  ^=  jep  =>  jo
+          =-  (ot payload/(ot headers/headers-to-map ~) ~) 
+                            ::  concat to bunt of map   ::after applying parser
+          headers-to-map=(cu ~(gas by *(map cord cord)) (ar (ot name/so value/so ~))) ::  array of JSON objects 
+      parsed-headers=(need (jep jon))
+  [parsed-message parsed-headers]
+::
+++  spam
+    |=  mess=(list msg)
+    ^-  (list move)
+    %+  turn  (~(tap by sup.hid))  ::  listify subscribers  //  how does this work??
+    |=  [ost=bone *]
+    ^-  move
+    :^  ost  %give  %rush
+    :+  %json  %a
+    %+  turn  mess
+    msg-to-json
+::
+++  msg-to-json  |=(msg (jobe id/[%s id] sub/[%s sub] from/[%s from] date/[%s date] ~))
+::
+++  peer
+  |=  [ost=bone *]
+  :_  +>.$
+  :-  [ost %give %nice ~]
+  ?~  vat  ~
+  ?~  ids.u.vat  ~
+  =+  mez=(scag 10 `(list msg)`(murn `(list ,@t)`ids.u.vat ~(get by messages.u.vat)))
+  [ost %give %rush %json %a (turn mez msg-to-json)]~
+--

@@ -1,0 +1,53 @@
+::
+::::
+  ::
+/?    314
+/=    gas    /$    fuel
+::
+::::  sivtyv-barnel
+  ::
+  !:
+
+^-  manx
+=+  :+  authcode=(~(get by qix.gas) %'code')
+      auth-url="https://accounts.google.com/o/oauth2/auth"      
+    queries="?response_type=code&client_id=181482021531-0lr34omo2g". ::concat . enate
+    "167hl1cacvohe5lu986s35.apps.googleusercontent.com".
+    "&redirect_uri=http://localhost:8443/gen/main/pub/fab/gmail".
+    "&access_type=offline".
+    "&scope=https://www.googleapis.com/auth/gmail.modify"
+
+;html
+  ;head
+    ;title: Gmail via Urbit
+    ;script@"/gop/hart.js";        :: ??
+    ;script@"/gen/main/lib/urb.js"; :: urb js lib
+    ;script@"https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js";  ::jquery
+    ;script@"http://fb.me/react-0.12.2.js";
+    ;script@"http://fb.me/JSXTransformer-0.12.2.js";
+    ;script@"/gen/main/pub/gmail/react-elems.js"(type "text/jsx");
+  ==
+  ;body
+    ;a/"{(weld auth-url queries)}": Authenticate via OAuth2
+    ;*  ?~  authcode  ~ 
+        :_  ~  
+        ;script: authcode='{(trip u.authcode)}'
+    ;script:'''
+            if (window.authcode)
+              urb.send({
+                      appl: "gmail",
+                      data: authcode,
+                      mark: "oauth2-code"
+                  }, function(){
+                  document.location.search = '';
+                });
+            '''
+    ;script(type "text/jsx"):'''
+                             React.render(
+                               React.createElement(MessageBox, {appl: 'gmail', path: "/get-messages"}),
+                               document.getElementById('content')
+                             );
+                             '''
+    ;div#content;
+  ==
+==
