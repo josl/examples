@@ -1,0 +1,39 @@
+::
+::
+::::
+  ::
+  /?  314
+!:
+::::  sivtyv-barnel
+  ::
+|%
+++  axle  (list result)
+++  result  ,[bplayer=@t bscore=@ud yplayer=@t yscore=@ud]
+--
+!:
+|_  [hid=hide vat=axle]
+
+++  poke-json
+  |=  [ost=bone you=ship args=json] ::question!!
+?.  =(/foos imp.hid)  ::  send data to parent app
+    =+  cag=`cage`[%result !>(args)]
+    :_(+>.$ [ost %pass /from-child %g %mess [our.hid /[app.hid]] you cag]~)
+  =+  jo
+  =+  parsedresult=~|(bad-json/args (need ((ot bcons/so bscore/ni ycons/so yscore/ni ~) args)))
+  =+  rez=`result`[-.parsedresult +<.parsedresult +>-.parsedresult +>+.parsedresult]
+  =.  vat  [rez vat]
+  ~&  rez
+  [[ost %give %nice ~]~ +>.$]
+::
+++  result-to-json  |=(result (jobe bcons/[%s bplayer] bscore/(jone bscore) ycons/[%s yplayer] yscore/(jone yscore) ~)) ::  jone
+++  peek
+  |=  [his=ship pax=path]
+  [%json `json`[%a (turn vat result-to-json)]]  :: don't forget to send %json in front
+--
+::
+::++  peek
+::  |=  [ost=bone *]
+::  :_  +>.$
+::  :-  [ost %give %nice ~]
+::  ?~  vat  ~
+::  ::  send array of results objects to the client
