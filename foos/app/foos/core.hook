@@ -4,6 +4,7 @@
   ::
   /?  314
 !:
+::
 ::::  sivtyv-barnel
   ::
 |%
@@ -30,10 +31,3 @@
   |=  [his=ship pax=path]
   [%json `json`[%a (turn vat result-to-json)]]  :: don't forget to send %json in front
 --
-::
-::++  peek
-::  |=  [ost=bone *]
-::  :_  +>.$
-::  :-  [ost %give %nice ~]
-::  ?~  vat  ~
-::  ::  send array of results objects to the client
