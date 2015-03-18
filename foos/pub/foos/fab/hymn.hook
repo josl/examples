@@ -21,55 +21,6 @@
     ;link(rel "stylesheet", type "text/css", href "/gen/main/pub/foos/src/main.css");
   ==
   ;body
-    ;div.recordfixture
-      ;input#bcons: Black Contestant
-      ;input#ycons: Yellow Contestant
-      ;input#bscore: Black Score
-      ;input#yscore: Yellow Score
-      ;button#entrees: Enter Result
-      ;script:'''
-              $("#entrees").click(function(){
-                var bscr = parseInt(bscore.value)
-                var yscr = parseInt(yscore.value)
-                if(bcons.value == '' || ycons.value == '' || bscr == '' || yscr == '')
-                  {alert('Please Fill Out All Fields'); return}
-                if(isValid(bscr, yscr)){  //check for valid scoreline
-                  urb.send({
-                    appl: "foos",
-                    data: {bcons:bcons.value, ycons:ycons.value, bscore:bscr, yscore:yscr},
-                    mark: "json"
-                  })
-                  newFixturesList = mounted.props.fixturesList.slice();
-                  newFixturesList.push({bcons: bcons.value, ycons: ycons.value, 
-                                        bscore: bscr, yscore: yscr}) //Dont forget to send object
-                  mounted.setProps({fixturesList: newFixturesList})
-                }else {alert('Please Enter a Valid Scoreline')}
-              })
-              isValid = function(bscore,yscore){
-                if(validRange(bscore) && validRange(yscore)){
-                  if(bscore == 10 || yscore == 10){
-                    if(yscore == 10 && bscore == 10) return false
-                    return true
-                  } else return false
-                } else return false
-              }
-              validRange = function(score){
-                if(score < 0 || score > 10) return false
-                return true
-              }
-              '''
-    ==
-    ;div#bindto;
-    ;script:'''
-            mounted = React.render(Page({players:[], fixturesList:[]}), $("#bindto"))
-            urb.subscribe({
-              appl: "foos",
-              path: "/"
-            }, function(err,d){
-              if(d.data.ok) return;
-              mounted.setProps({fixturesList:d.data})
-            })
-            '''
+    ;div#container;
   ==
 ==
-
