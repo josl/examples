@@ -68,15 +68,12 @@ $(function() {
       $t.removeClass('disabled')
     })
   })
-
-  $.getJSON('/lead',
-    function(data) {
-      vat = data
-      render()
-    } 
-  )
   
   window.urb.appl = "lead"
+  
+   //  XX getJSON(/lead) shim
+  window.urb.bind("/", function(e,d){ vat = d.data; render()})
+  
   window.urb.subscribe({
     path:"/data"
   },function(err,res) {
@@ -88,5 +85,6 @@ $(function() {
         render()
       }
     }
+    else console.log(err)
   })
 })

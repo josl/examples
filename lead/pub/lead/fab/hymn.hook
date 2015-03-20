@@ -1,7 +1,6 @@
 ;html
   ;head
-    ;link(type "text/css", rel "stylesheet", href "/gen/main/pub/lead/src/main.css");
-    ;script(type "text/javascript", src "/gop/hart.js");
+    ;link(type "text/css", rel "stylesheet", href "/main/pub/lead/src/main.css");
     ;title: urbit example apps - leaderboard
   ==
   ;body
@@ -20,7 +19,7 @@
       ==
     ==
     ;script(type "text/javascript", src "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js");
-    ;script(type "text/javascript", src "/gen/main/lib/urb.js");
-    ;script(type "text/javascript", src "/gen/main/pub/lead/src/main.js");
+    ;script(type "text/javascript", src "/~/at/main/lib/urb.js");
+    ;script(type "text/javascript", src "/main/pub/lead/src/main.js");
   ==
 ==
