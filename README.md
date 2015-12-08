@@ -40,16 +40,18 @@ or a library:
 
 (note that there are two spaces between '/+' and 'sorts' in the first line)
 
-Navigate to example `%ford` pages at
-http://your-ship.urbit.org/examples/fordn (with the appropriate number
-for `n`), or http://localhost:8080/examples/pub/fordn if you're not routed
-through `~doznec`. To start example `%gall` apps, use `|start %examples
-%name`.
+To serve `%ford` pages, run `|serve %examples`, switching the web
+server root to `/=examples=/web` instead of the `%home` desk.
 
-Many of the %gall apps have front ends that can also be found at 
-http://YOUR-SHIP.urbit.org/examples/pub/APP-NAME/fab if you're routed
-through `~doznec`, or http://localhost:8080/examples/pub/APP-NAME/fab if 
-you're not.
+The ford examples are accessible at http://your-ship.urbit.org/fordN (with the
+appropriate number for `N`), or http://localhost:8080/fordn if you're not routed
+through `~doznec`.
+
+To start example `%gall` apps, use `|start %examples %name`.
+
+Many of the %gall apps have front ends that can also be found at
+http://YOUR-SHIP.urbit.org/APP-NAME if you're routed through `~doznec`, or
+http://localhost:8080/APP-NAME if you're not.
 
 # Feedback
 
