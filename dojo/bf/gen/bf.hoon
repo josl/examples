@@ -2,24 +2,25 @@
 ::
 ::::  /hoon/bf/gen
   ::
+/-    sole
+[sole]
 !:
-:-  %say
+:-  %ask
 |=  $:  ^
-        {in/@ $~}
+        {input/(list @) in/@ $~}
         $~
     ==
-:-  %noun
-=<  (bf ">++++++++[<+++++++++>-]<.>>+>+>++>[-]+<[>[->+<<++++>]<<]>.+++++++..+++.>>+++++++.<<<[[-]<[-]>]<+++++++++++++++.>>.+++.------.--------.>>+.>++++.") :: run vm 
+^-  (sole-result {$noun (list @)})
+=<  bf
 ::
-::::  ~haptem-fopnys
+::::  ~haptem-fopnys, ~fyr
   ::
 |%
 ++  bf
-  |=  input/(list @)
   =+  [ip=0 current=0 left=(reap 0 0) right=(reap 30 0)]
-  |-  ^-  (list @)
+  |-  ^-  (sole-result {$noun (list @)})
   ?:  =(ip (lent input))
-    (welp left [current [right]])
+    (sole-so %noun (welp left [current [right]]))
   ?+  `@`(snag ip input)
     $(ip +(ip))
     $'+'  $(ip +(ip), current +(current))
@@ -62,10 +63,15 @@
       $(pos (dec pos))
     $'.'  ~&  `@t`current
       $(ip +(ip))
-    $','  %=  $
-      ip  +(ip)
-      current  (cut 3 [0 1] in)
-      in  (rsh 3 1 in)
+    $','  
+      |-
+      ?~  in
+        %+  sole-lo  [%& %bf-in ""]
+        |=(a/tape ^$(in (crip "{a}\0a")))
+      %=  ^$
+        ip  +(ip)
+        current  (cut 3 [0 1] in)
+        in  (rsh 3 1 in)
       ==
   ==
 --
